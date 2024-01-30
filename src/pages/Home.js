@@ -1,15 +1,33 @@
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase";
 import BlogSection from "../components/BlogSection";
 import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
 import Tags from "../components/Tags";
+import Search from "../components/Search";
+import { isEmpty, isNull, orderBy } from "lodash";
+import { useLocation } from "react-router-dom";
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 const Home = ({ setActive, user }) => {
   const [loading, setLoading] = useState(true);
   const [blogs, setBlogs] = useState([]);
   const [tags, setTags] = useState([]);
+  const [search, setSearch] = useState("");
+  const queryString = useQuery();
+  const searchQuery = queryString.get("searchQuery");
 
   useEffect(() => {
     const unsub = onSnapshot(
@@ -37,9 +55,27 @@ const Home = ({ setActive, user }) => {
     };
   }, [setActive]);
 
+  useEffect(() => {
+    if (!isNull(searchQuery)) {
+      searchBlogs();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
+
   if (loading) {
     return <Spinner />;
   }
+
+  const searchBlogs = async () => {
+    const blogRef = collection(db, "blogs");
+    const searchTitleQuery = query(blogRef, where("title", "==", searchQuery));
+    const titleSnapshot = await getDocs(searchTitleQuery);
+    let searchTitleBlogs = [];
+    titleSnapshot.forEach((doc) => {
+      searchTitleBlogs.push({ id: doc.id, ...doc.data() });
+    });
+    setBlogs(searchTitleBlogs);
+  };
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this blog?")) {
@@ -52,6 +88,21 @@ const Home = ({ setActive, user }) => {
         console.log(err);
       }
     }
+  };
+
+  const getBlogs = async () => {
+    const blogRef = collection(db, "blogs");
+    const blogsQuery = query(blogRef, orderBy("title"));
+    const docSnapshot = await getDocs(blogsQuery);
+    setBlogs(docSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+  };
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    if (isEmpty(value)) {
+      getBlogs();
+    }
+    setSearch(value);
   };
 
   return (
@@ -67,6 +118,7 @@ const Home = ({ setActive, user }) => {
             />
           </div>
           <div className="col-md-3">
+            <Search search={search} handleChange={handleChange} />
             <Tags tags={tags} />
           </div>
         </div>
