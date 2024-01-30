@@ -59,6 +59,7 @@ const Home = ({ setActive, user }) => {
     if (!isNull(searchQuery)) {
       searchBlogs();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchQuery]);
 
   if (loading) {
