@@ -59,7 +59,7 @@ const Home = ({ setActive, user }) => {
     if (!isNull(searchQuery)) {
       searchBlogs();
     }
-  }, [searchQuery]);
+    }, [searchQuery]);
 
   if (loading) {
     return <Spinner />;
