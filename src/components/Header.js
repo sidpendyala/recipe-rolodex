@@ -1,5 +1,9 @@
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Link } from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
+import transition from "bootstrap";
 
 const Header = ({active, setActive, user, handleLogout}) => {
     const userId = user?.uid;
@@ -18,7 +22,7 @@ const Header = ({active, setActive, user, handleLogout}) => {
                         aria-expanded="true"
                         aria-label="Toggle Navigation"
                     >
-                        <span className="fa fa-bars"></span>
+                        <FontAwesomeIcon icon={faBars} />
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
