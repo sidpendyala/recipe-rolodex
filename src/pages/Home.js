@@ -142,7 +142,6 @@ const Home = ({ setActive, user, active }) => {
     }
   };
 
-
   const handleChange = (e) => {
     const { value } = e.target;
     if (isEmpty(value)) {
