@@ -7,7 +7,8 @@ import {
   onSnapshot,
   query,
   where,
-  orderBy
+  orderBy,
+  startAfter
 } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase";
@@ -28,6 +29,8 @@ const Home = ({ setActive, user, active }) => {
   const [blogs, setBlogs] = useState([]);
   const [tags, setTags] = useState([]);
   const [search, setSearch] = useState("");
+  const [lastVisible, setLastVisible] = useState(null);
+  const [hide, setHide] = useState(false);
   const queryString = useQuery();
   const searchQuery = queryString.get("searchQuery");
   const location = useLocation();
@@ -68,6 +71,31 @@ const Home = ({ setActive, user, active }) => {
     const first4 = query(blogRef, orderBy("title"), limit(4));
     const docSnapshot = await getDocs(first4);
     setBlogs(docSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    setLastVisible(docSnapshot.docs[docSnapshot.docs.length - 1]);
+  };
+
+  const updateState = (docSnapshot) => {
+    const isCollectionEmpty = docSnapshot.size === 0;
+    if (!isCollectionEmpty) {
+      const blogsData = docSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      setBlogs((blogs) => [...blogs, ...blogsData]);
+      setLastVisible(docSnapshot.docs[docSnapshot.docs.length - 1]);
+    } else {
+      toast.info("No more blogs to display!");
+      setHide(true);
+    }
+  }
+
+  const fetchMore = async () => {
+    setLoading(true);
+    const blogRef = collection(db, "blogs");
+    const next4 = query(blogRef, orderBy("title"), limit(4), startAfter(lastVisible));
+    const docSnapshot = await getDocs(next4);
+    updateState(docSnapshot);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -97,10 +125,9 @@ const Home = ({ setActive, user, active }) => {
     });
     const combinedSearch = searchTitleBlogs.concat(searchTagBlogs);
     setBlogs(combinedSearch);
+    setHide(true);
     setActive("");
   };
-
-  const fetchMore = () => {}
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this blog?")) {
@@ -120,6 +147,7 @@ const Home = ({ setActive, user, active }) => {
     const { value } = e.target;
     if (isEmpty(value)) {
       getBlogs();
+      setHide(false)
     }
     setSearch(value);
   };
@@ -143,7 +171,9 @@ const Home = ({ setActive, user, active }) => {
               user={user}
               handleDelete={handleDelete}
             />
-            <button className="btn btn-primary" onClick={fetchMore}>Load more</button>
+            {!hide && (
+              <button className="btn btn-primary" onClick={fetchMore}>Load more</button>
+            )}
           </div>
           <div className="col-md-3">
             <Search search={search} handleChange={handleChange} />
