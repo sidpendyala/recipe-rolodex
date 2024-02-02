@@ -4,11 +4,10 @@ import { Link } from "react-router-dom";
 import { excerpt } from "../utility";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 
-const BlogSection = ({ blogs, user, handleDelete }) => {
+const BlogSection = ({ id, title, description, category, user, handleDelete }) => {
   const userId = user?.uid;
   return (
     <div>
-      {blogs?.map((item) => (
         <div className="row pb-4" key={item.id}>
           <div className="hover-blogs-img">
             <div className="blogs-img">
@@ -46,7 +45,6 @@ const BlogSection = ({ blogs, user, handleDelete }) => {
             )}
           </div>
         </div>
-      ))}
     </div>
   );
 };
