@@ -19,6 +19,8 @@ const initialState = {
   tags: [],
   category: "",
   description: "",
+  comments: [],
+  likes: []
 };
 
 const categoryOption = [

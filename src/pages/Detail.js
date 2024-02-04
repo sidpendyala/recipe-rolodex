@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import { db } from '../firebase';
 import Related from './Related';
+import Tags from '../components/Tags';
 
 const Detail = ({setActive}) => {
   const {id} = useParams();
@@ -52,6 +53,7 @@ const Detail = ({setActive}) => {
               <p className="text-start">{blog?.description}</p>
             </div>
             <div className="col-md-3">
+              <Tags tags={blog?.tags}/>
               <Related id={id} blogs={relatedBlogs}/>
             </div>
           </div>
