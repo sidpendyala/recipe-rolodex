@@ -26,6 +26,7 @@ const Cat = () => {
 
   useEffect(() => {
     getCat();
+    // eslint-disable-next-line
   }, []);
 
   if (loading) {

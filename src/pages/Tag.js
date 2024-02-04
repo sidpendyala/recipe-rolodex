@@ -26,6 +26,7 @@ const Tag = () => {
 
   useEffect(() => {
     getTags();
+    // eslint-disable-next-line
   }, []);
 
   if (loading) {
