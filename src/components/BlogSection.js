@@ -12,7 +12,7 @@ const BlogSection = ({ id, title, description, category, author, timestamp, imgU
             <div className="blogs-img">
               <img src={imgUrl} alt={title} />
               <div></div>
-            </div>c
+            </div>
           </div>
           <div className="col-md-7">
             <div className="text-start">

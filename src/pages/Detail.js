@@ -1,16 +1,26 @@
-import { doc, getDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, limit, query, where } from 'firebase/firestore';
 import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import { db } from '../firebase';
+import Related from './Related';
 
 const Detail = ({setActive}) => {
   const {id} = useParams();
   const [blog, setBlog] = useState(null);
+  const [relatedBlogs, setRelatedBlogs] = useState([]);
 
   const getBlogDetail = async () => {
+    const blogRef = collection(db, "blogs");
     const docRef = doc(db, "blogs", id);
     const blogDetail = await getDoc(docRef);
     setBlog(blogDetail.data());
+    const relatedBlogsQuery = query(blogRef, where("tags", "array-contains-any", blogDetail.data().tags, limit(3)));
+    const relatedBlogsSnapshot = await getDocs(relatedBlogsQuery);
+    const relatedBlogs = [];
+    relatedBlogsSnapshot.forEach((doc) => {
+      relatedBlogs.push({id: doc.id, ...doc.data()})
+    });
+    setRelatedBlogs(relatedBlogs);
     setActive(null);
   }
 
@@ -42,8 +52,7 @@ const Detail = ({setActive}) => {
               <p className="text-start">{blog?.description}</p>
             </div>
             <div className="col-md-3">
-              <h2>Tags</h2>
-              <h2>Most Popular</h2>
+              <Related id={id} blogs={relatedBlogs}/>
             </div>
           </div>
         </div>
