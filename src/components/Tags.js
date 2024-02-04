@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Tags = ({tags}) => {
   return (
@@ -8,8 +9,12 @@ const Tags = ({tags}) => {
         </div>
         <div className="tags">
             {tags?.map((tag, index) => (
-                <p className="tag" key={index}>{tag}</p>
-            ))}
+                <p className="tag" key={index}>
+                  <Link to={`/tag/${tag}`} style={{textDecoration: "none", color: "black"}}>
+                  {tag}
+                  </Link>
+                </p>
+            ))} 
         </div>
     </div>
   )

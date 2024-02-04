@@ -14,6 +14,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from './components/Header';
 import { auth } from './firebase';
 import { signOut } from 'firebase/auth';
+import Tag from './pages/Tag';
+import Cat from './pages/Cat';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   const [active, setActive] = useState("home");
@@ -42,6 +45,7 @@ function App() {
   return (
     <div className="App">
       <Header setActive={setActive} active={active} user = {user} handleLogout = {handleLogout}/>
+      <ScrollToTop />
       <ToastContainer position="top-center"/>
       <Routes>
         <Route path="/" element={<Home setActive={setActive} active={active} user={user}/>} />
@@ -52,6 +56,8 @@ function App() {
         <Route path="/auth" element={<Auth setActive = {setActive} setUser={setUser} />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/search" element={<Home setActive={setActive} user={user}/>} />
+        <Route path="/tag/:tag" element={<Tag />}/>
+        <Route path="/category/:category" element={<Cat />} />
       </Routes>
     </div>
   );
