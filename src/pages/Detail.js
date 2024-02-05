@@ -23,8 +23,8 @@ const Detail = ({setActive, user}) => {
 
   const getBlogDetail = async () => {
     setLoading(true);
-    const blogRef = collection(db, "blogs");
-    const docRef = doc(db, "blogs", id);
+    const blogRef = collection(db, "recipes");
+    const docRef = doc(db, "recipes", id);
     const blogDetail = await getDoc(docRef);
     setBlog(blogDetail.data());
     const relatedBlogsQuery = query(blogRef, where("tags", "array-contains-any", blogDetail.data().tags, limit(3)));
@@ -58,7 +58,7 @@ const Detail = ({setActive, user}) => {
       body: userComment,
     });
     toast.success("Comment posted successfully.");
-    await updateDoc(doc(db, "blogs", id), {
+    await updateDoc(doc(db, "recipes", id), {
       ...blog,
       comments,
       timestamp: serverTimestamp(),
@@ -80,7 +80,7 @@ const Detail = ({setActive, user}) => {
           setLikes(likes)
         }
       }
-      await updateDoc(doc(db, "blogs", id), {
+      await updateDoc(doc(db, "recipes", id), {
         ...blog,
         likes,
         timestamp: serverTimestamp(),
@@ -115,6 +115,16 @@ const Detail = ({setActive, user}) => {
                 />
               </span>
               <p className="text-start">{blog?.description}</p>
+              <br />
+              <div className="blog-heading text-start py-2 mb-4">
+                Ingredients
+              </div>
+              <p className="text-start">{blog?.ingredients}</p>
+              <br />
+              <div className="blog-heading text-start py-2 mb-4">
+                Instructions
+              </div>
+              <p className="text-start">{blog?.instructions}</p>
               <br />
             <div className='custombox'>
               <div className='scroll'>

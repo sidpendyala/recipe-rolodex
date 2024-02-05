@@ -59,7 +59,7 @@ function App() {
         <Route path="/search" element={<Home setActive={setActive} user={user}/>} />
         <Route path="/tag/:tag" element={<Tag setActive={setActive}/>}/>
         <Route path="/category/:category" element={<Cat setActive={setActive}/>} />
-        <Route path="/blogs" element={<Blogs setActive={setActive}/>} />
+        <Route path="/recipes" element={<Blogs setActive={setActive}/>} />
       </Routes>
     </div>
   );

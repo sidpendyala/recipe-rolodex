@@ -24,7 +24,7 @@ const Search = ({ search, handleChange }) => {
               type="text"
               value={search}
               className="form-control search-input"
-              placeholder="Search"
+              placeholder="Search recipes"
               onChange={handleChange}
             />
           </div>

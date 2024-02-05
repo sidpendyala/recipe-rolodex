@@ -1,4 +1,5 @@
 $yellow:#f5bc04;
+$red:#D2042D;
 
 @mixin border-radius($radius) {
 	-webkit-border-radius: $radius;
@@ -42,9 +43,6 @@ $yellow:#f5bc04;
 }
 
 
-
-// Header
-
 .navbar-light .navbar-nav .open > .nav-link, .navbar-light .navbar-nav .active > .nav-link, .navbar-light .navbar-nav .nav-link.open, .navbar-light .navbar-nav .nav-link.active {
 	color: #fff!important;
 	padding-top: 12px!important;
@@ -53,8 +51,7 @@ $yellow:#f5bc04;
 	padding-right: 20px!important;
 	margin: 0 20px!important;
 	@include transition(0.5s);
-	background: $yellow!important;
-	@include clip-path(polygon(100% 0, 100% 85%, 14% 85%, 0 100%, 0% 60%, 0 0));
+	background: $red!important;
 }
 .navbar-light .navbar-nav .nav-link {
 	color: #222!important;
@@ -65,10 +62,9 @@ $yellow:#f5bc04;
 	margin: 0 20px!important;
 	@include transition(0.5s);
 	position: relative!important;
-	@include clip-path(polygon(100% 0, 100% 85%, 14% 85%, 0 100%, 0% 60%, 0 0));
 
 	&:focus, &:hover {
-		background: $yellow!important;
+		background: $red!important;
 		color: #fff!important;
 		padding-top: 12px!important;
 		padding-bottom: 15px!important;
@@ -92,7 +88,6 @@ $yellow:#f5bc04;
  cursor: pointer;   
 }
 
-// form
 .heading {
     font-size: 20px;
 	color: #424040;
@@ -173,8 +168,6 @@ $yellow:#f5bc04;
       font-size: 18px;
       margin: auto;
   }
-
-//   Blog Section
 
 .blog-heading {
 	font-size: 24px;
@@ -269,8 +262,6 @@ $yellow:#f5bc04;
 	font-size: 14px;
 }
 
-// Detail
-
 .blog-title-box {
     width: 38.2%;
 	z-index: 555;
@@ -335,13 +326,10 @@ $yellow:#f5bc04;
 	}
 }
 
-// Home
 .spinner {
 	width: 3rem;
 	height: 3rem;
 }
-
-// Tags
 
 .tags > a {
     text-decoration: none;
@@ -362,128 +350,6 @@ $yellow:#f5bc04;
 	text-decoration: none;
 }
 
-// Most popular
-
-.most-popular-img {
-    height: 80px;
-	width: 100%;
-}
-
-.most-popular-font {
-   font-weight: 500; 
-}
-
-.most-popular-font-meta {
-    font-size: 12px;
-	color: #777;
-}
-
-// Trending
-.trending-img-position {
-	position: relative;
-	overflow: hidden;
-	z-index: 5;
-	cursor: pointer;
-}
-
-.trending-img-size {
-	height: 326px;
-	overflow: hidden;
-}
-.trending-img-size > img {
-	height: 340px;
-	min-width: 100%;
-}
-
-.trending-img-relative {
-	position: relative;
-}
-
-.trending-img-absolute {
-	position: absolute;
-	height: 100%;
-	width: 100%;
-	top: 0;
-	right: 0;
-	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(0,0,0,0.83) 100%);
-	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(0,0,0,0.83) 100%);
-	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(0,0,0,0.83) 100%);
-	z-index: 7;
-}
-
-.trending-img-absolute-1 {
-	position: absolute;
-	width: 100%;
-	z-index: 9;
-	padding: 10px;
-	bottom: 0;
-}
-
-.trending-meta-info {
-	color: rgba(255,255,255,0.7);
-	font-size: 13px;
-}
-
-.trending-img-position:hover {
-	-webkit-animation: swing1 1s ease;
-	animation: swing1 1s ease;
-	-webkit-animation-iteration-count: 1;
-	animation-iteration-count: 1;
-}
- @-webkit-keyframes swing1 {
- 15% {
- -webkit-transform: translateX(5px);
- transform: translateX(5px);
-}
- 30% {
- -webkit-transform: translateX(-5px);
- transform: translateX(-5px);
-}
- 50% {
- -webkit-transform: translateX(3px);
- transform: translateX(3px);
-}
- 65% {
- -webkit-transform: translateX(-3px);
- transform: translateX(-3px);
-}
- 80% {
- -webkit-transform: translateX(2px);
- transform: translateX(2px);
-}
- 100% {
- -webkit-transform: translateX(0);
- transform: translateX(0);
-}
-}
-@keyframes swing1 {
- 15% {
- -webkit-transform: translateX(5px);
- transform: translateX(5px);
-}
- 30% {
- -webkit-transform: translateX(-5px);
- transform: translateX(-5px);
-}
- 50% {
- -webkit-transform: translateX(3px);
- transform: translateX(3px);
-}
- 65% {
- -webkit-transform: translateX(-3px);
- transform: translateX(-3px);
-}
- 80% {
- -webkit-transform: translateX(2px);
- transform: translateX(2px);
-}
- 100% {
- -webkit-transform: translateX(0);
- transform: translateX(0);
-}
-}
-
-// search
 .form-inline {
 	display: flex;
 	align-items: center;
@@ -494,7 +360,6 @@ $yellow:#f5bc04;
 	float: left;
 }
 
-// Category
 .widget {
 	position: relative;
     display: block;
@@ -524,7 +389,6 @@ $yellow:#f5bc04;
     right: 0;
 }
 
-// Scroll
 .scroll-to-top {
 	position: fixed;
 	bottom: 20px;
@@ -549,13 +413,11 @@ $yellow:#f5bc04;
 	}
   }
 
-//   Card
 .related-content {
 	border-radius: 20px;
 	cursor: pointer;
   }
 
-// Comment
 
 .custombox {
 	position: relative;
@@ -634,7 +496,6 @@ $yellow:#f5bc04;
     font-weight: 600;
 }
 
-// Pagination
 .btn_mange_pagging {
 	background: #dadada;
 	padding: 12px 20px;

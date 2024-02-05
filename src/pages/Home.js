@@ -40,7 +40,7 @@ const Home = ({ setActive, user, active }) => {
   useEffect(() => {
     setSearch("");
     const unsub = onSnapshot(
-      collection(db, "blogs"),
+      collection(db, "recipes"),
       (snapshot) => {
         let list = [];
         let tags = [];
@@ -70,7 +70,7 @@ const Home = ({ setActive, user, active }) => {
   }, [active]);
 
   const getBlogs = async () => {
-    const blogRef = collection(db, "blogs");
+    const blogRef = collection(db, "recipes");
     const first4 = query(blogRef, orderBy("title"), limit(4));
     const docSnapshot = await getDocs(first4);
     setBlogs(docSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
@@ -87,14 +87,14 @@ const Home = ({ setActive, user, active }) => {
       setBlogs((blogs) => [...blogs, ...blogsData]);
       setLastVisible(docSnapshot.docs[docSnapshot.docs.length - 1]);
     } else {
-      toast.info("No more blogs to display!");
+      toast.info("No more recipes to display!");
       setHide(true);
     }
   }
 
   const fetchMore = async () => {
     setLoading(true);
-    const blogRef = collection(db, "blogs");
+    const blogRef = collection(db, "recipes");
     const next4 = query(blogRef, orderBy("title"), limit(4), startAfter(lastVisible));
     const docSnapshot = await getDocs(next4);
     updateState(docSnapshot);
@@ -105,7 +105,7 @@ const Home = ({ setActive, user, active }) => {
     if (!isNull(searchQuery)) {
       searchBlogs();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
     }, [searchQuery]);
 
   if (loading) {
@@ -113,7 +113,7 @@ const Home = ({ setActive, user, active }) => {
   }
 
   const searchBlogs = async () => {
-    const blogRef = collection(db, "blogs");
+    const blogRef = collection(db, "recipes");
     const searchTitleQuery = query(blogRef, where("title", "==", searchQuery));
     const searchTagQuery = query(blogRef, where("tags", "array-contains", searchQuery));
     const titleSnapshot = await getDocs(searchTitleQuery);
@@ -133,11 +133,11 @@ const Home = ({ setActive, user, active }) => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this blog?")) {
+    if (window.confirm("Are you sure you want to delete this recipe?")) {
       try {
         setLoading(true);
-        await deleteDoc(doc(db, "blogs", id));
-        toast.success("Blog deleted successfully.");
+        await deleteDoc(doc(db, "recipes", id));
+        toast.success("Recipe deleted successfully.");
         getBlogs();
         setLoading(false);
       } catch (err) {
@@ -177,7 +177,7 @@ const Home = ({ setActive, user, active }) => {
       <div className="container padding">
         <div className="row mx-0">
           <div className="col-md-8">
-          <div className="blog-heading text-start py-2 mb-4">Daily Blogs</div>
+          <div className="blog-heading text-start py-2 mb-4">Daily Recipes</div>
           {blogs.length === 0  && location.pathname !== "/" && (
               <>
               <h4>

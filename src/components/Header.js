@@ -33,11 +33,11 @@ const Header = ({active, setActive, user, handleLogout}) => {
                                     Home
                                 </li>
                             </Link>
-                            <Link to="/blogs" style={{textDecoration: "none"}}>
-                                <li className= {`nav-item nav-link ${active === "blogs" ? "active" : ""}`}
-                                    onClick={() => setActive("blogs")}
+                            <Link to="/recipes" style={{textDecoration: "none"}}>
+                                <li className= {`nav-item nav-link ${active === "recipes" ? "active" : ""}`}
+                                    onClick={() => setActive("recipes")}
                                 >
-                                    Blogs
+                                    Recipes
                                 </li>
                             </Link>
 

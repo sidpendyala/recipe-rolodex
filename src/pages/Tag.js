@@ -12,7 +12,7 @@ const Tag = ({setActive}) => {
 
   const getTags = async () => {
     setLoading(true);
-    const blogRef = collection(db, "blogs");
+    const blogRef = collection(db, "recipes");
     const TagQuery = query(blogRef, where("tags", "array-contains", tag));
     const docSnapshot = await getDocs(TagQuery);
     let tagBlogs = [];

@@ -19,18 +19,19 @@ const initialState = {
   tags: [],
   category: "",
   description: "",
+  ingredients: "",
+  instructions: "",
   comments: [],
   likes: []
 };
 
 const categoryOption = [
-  "Fashion",
-  "Tech",
-  "Food",
-  "Sports",
-  "Politics",
-  "Travel",
-  "Business",
+  "Appetizer",
+  "Main Course",
+  "Side Dish",
+  "Dessert",
+  "Salad",
+  "Drinks/Beverages",
 ];
 
 const AddEdit = ({ user, setActive }) => {
@@ -40,7 +41,7 @@ const AddEdit = ({ user, setActive }) => {
 
   const { id } = useParams();
 
-  const { title, tags, category, description } = form;
+  const { title, tags, category, description, ingredients, instructions } = form;
 
   const navigate = useNavigate();
 
@@ -87,7 +88,7 @@ const AddEdit = ({ user, setActive }) => {
   }, [id]);
 
   const getBlogDetail = async () => {
-    const docRef = doc(db, "blogs", id);
+    const docRef = doc(db, "recipes", id);
     const snapshot = await getDoc(docRef);
     if (snapshot.exists()) {
       setForm({ ...snapshot.data() });
@@ -112,25 +113,25 @@ const AddEdit = ({ user, setActive }) => {
     if (category && tags && title && description) {
       if(!id){
         try {
-          await addDoc(collection(db, "blogs"), {
+          await addDoc(collection(db, "recipes"), {
             ...form,
             timestamp: serverTimestamp(),
             author: user.displayName,
             userId: user.uid,
           });
-          toast.success("Blog created successfully.");
+          toast.success("Recipe created successfully.");
         } catch (err) {
           console.log(err);
         }
       } else {
         try {
-          await updateDoc(doc(db, "blogs", id), {
+          await updateDoc(doc(db, "recipes", id), {
             ...form,
             timestamp: serverTimestamp(),
             author: user.displayName,
             userId: user.uid,
           });
-          toast.success("Blog updated successfully.");
+          toast.success("Recipe updated successfully.");
         } catch (err) {
           console.log(err);
         }
@@ -147,7 +148,7 @@ const AddEdit = ({ user, setActive }) => {
       <div className="container">
         <div className="col-12">
           <div className="text-center heading py-2">
-            {id ? "Update blog" : "Create Blog"}
+            {id ? "Update recipe" : "Create recipe"}
           </div>
           <div className="row h-100 justify-content-center align-items-center">
             <div className="col-10 col-md-8 col-lg-6">
@@ -189,6 +190,24 @@ const AddEdit = ({ user, setActive }) => {
                     placeholder="Description"
                     value={description}
                     name="description"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-12 py-3">
+                  <textarea
+                    className="form-control description-box"
+                    placeholder="Ingredients"
+                    value={ingredients}
+                    name="ingredients"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-12 py-3">
+                  <textarea
+                    className="form-control description-box"
+                    placeholder="Instructions"
+                    value={instructions}
+                    name="instructions"
                     onChange={handleChange}
                   />
                 </div>

@@ -19,7 +19,7 @@ import {
   
   const Blogs = ({setActive}) => {
     const [loading, setLoading] = useState(false);
-    const [blogs, setBlogs] = useState([]);
+    const [recipes, setRecipes] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [lastVisible, setLastVisible] = useState(null);
     const [noOfPages, setNoOfPages] = useState(null);
@@ -28,7 +28,7 @@ import {
     useEffect(() => {
       getBlogsData();
       getTotalBlogs();
-      setActive("blogs");
+      setActive("recipes");
       //eslint-disable-next-line
     }, []);
   
@@ -38,17 +38,17 @@ import {
   
     const getBlogsData = async () => {
       setLoading(true);
-      const blogRef = collection(db, "blogs");
+      const blogRef = collection(db, "recipes");
       const first = query(blogRef, orderBy("title"), limit(4));
       const docSnapshot = await getDocs(first);
-      setBlogs(docSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      setRecipes(docSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
       setCount(docSnapshot.size);
       setLastVisible(docSnapshot.docs[docSnapshot.docs.length - 1]);
       setLoading(false);
     };
   
     const getTotalBlogs = async () => {
-      const blogRef = collection(db, "blogs");
+      const blogRef = collection(db, "recipes");
       const docSnapshot = await getDocs(blogRef);
       const totalBlogs = docSnapshot.size;
       const totalPage = Math.ceil(totalBlogs / 4);
@@ -57,7 +57,7 @@ import {
   
     const fetchMore = async () => {
       setLoading(true);
-      const blogRef = collection(db, "blogs");
+      const blogRef = collection(db, "recipes");
       const nextBlogsQuery = query(
         blogRef,
         orderBy("title"),
@@ -65,7 +65,7 @@ import {
         limit(4)
       );
       const nextBlogsSnaphot = await getDocs(nextBlogsQuery);
-      setBlogs(
+      setRecipes(
         nextBlogsSnaphot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       );
       setCount(nextBlogsSnaphot.size);
@@ -74,7 +74,7 @@ import {
     };
     const fetchPrev = async () => {
       setLoading(true);
-      const blogRef = collection(db, "blogs");
+      const blogRef = collection(db, "recipes");
       const end =
         noOfPages !== currentPage ? endAt(lastVisible) : endBefore(lastVisible);
       const limitData =
@@ -85,7 +85,7 @@ import {
           : limitToLast(4);
       const prevBlogsQuery = query(blogRef, orderBy("title"), end, limitData);
       const prevBlogsSnaphot = await getDocs(prevBlogsQuery);
-      setBlogs(
+      setRecipes(
         prevBlogsSnaphot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       );
       setCount(prevBlogsSnaphot.size);
@@ -106,8 +106,8 @@ import {
       <div>
         <div className="container">
           <div className="row">
-            <div className="blog-heading text-center py-2 mb-4">All Blogs</div>
-            {blogs?.map((blog) => (
+            <div className="blog-heading text-center py-2 mb-4">All Recipes</div>
+            {recipes?.map((blog) => (
               <div className="col-md-6" key={blog.id}>
                 <BlogSection {...blog} />
               </div>

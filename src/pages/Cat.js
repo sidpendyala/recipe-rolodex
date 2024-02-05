@@ -12,7 +12,7 @@ const Cat = ({setActive}) => {
 
   const getCat = async () => {
     setLoading(true);
-    const blogRef = collection(db, "blogs");
+    const blogRef = collection(db, "recipes");
     const catQuery = query(blogRef, where("category", "==", category));
     const docSnapshot = await getDocs(catQuery);
     let catBlogs = [];
