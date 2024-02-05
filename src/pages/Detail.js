@@ -1,13 +1,20 @@
-import { collection, doc, getDoc, getDocs, limit, query, where } from 'firebase/firestore';
+import { Timestamp, collection, doc, getDoc, getDocs, limit, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import { db } from '../firebase';
 import Related from './Related';
 import Tags from '../components/Tags';
+import { isEmpty } from 'lodash';
+import Comments from '../components/Comments';
+import Comment from '../components/Comment';
+import { toast } from 'react-toastify';
 
-const Detail = ({setActive}) => {
+const Detail = ({setActive, user}) => {
+  const userId = user?.uid;
   const {id} = useParams();
   const [blog, setBlog] = useState(null);
+  const [comments, setComments] = useState([]); 
+  const [userComment, setUserComment] = useState("");
   const [relatedBlogs, setRelatedBlogs] = useState([]);
 
   const getBlogDetail = async () => {
@@ -16,6 +23,7 @@ const Detail = ({setActive}) => {
     const blogDetail = await getDoc(docRef);
     setBlog(blogDetail.data());
     const relatedBlogsQuery = query(blogRef, where("tags", "array-contains-any", blogDetail.data().tags, limit(3)));
+    setComments(blogDetail.data().comments ? blogDetail.data().comments : []);
     const relatedBlogsSnapshot = await getDocs(relatedBlogsQuery);
     const relatedBlogs = [];
     relatedBlogsSnapshot.forEach((doc) => {
@@ -27,8 +35,26 @@ const Detail = ({setActive}) => {
 
   useEffect(() => {
     id && getBlogDetail();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [id])
+
+  const handleComment = async (e) => {
+    e.preventDefault();
+    comments.push({
+      createdAt: Timestamp.fromDate(new Date()),
+      userId,
+      name: user?.displayName,
+      body: userComment,
+    });
+    toast.success("Comment posted successfully.");
+    await updateDoc(doc(db, "blogs", id), {
+      ...blog,
+      comments,
+      timestamp: serverTimestamp(),
+    });
+    setComments(comments);
+    setUserComment("")
+  };
 
   return (
     <div className="single">
@@ -51,6 +77,22 @@ const Detail = ({setActive}) => {
                 {blog?.timestamp.toDate().toDateString()}
               </span>
               <p className="text-start">{blog?.description}</p>
+              <br />
+            <div className='custombox'>
+              <h4 className='small-title'>
+                {blog?.comments?.length} comment(s)
+               </h4>
+               {isEmpty(comments) ? (
+                <Comments msg={"No comments yet! Be the first to comment."}/>
+               ) : (
+               <>
+               {comments?.map((comment) => (
+                <Comments {...comment}/>
+               ))}
+               </>
+               )}
+            </div>
+            <Comment userId={userId} userComment={userComment} setUserComment={setUserComment} handleComment={handleComment}/>
             </div>
             <div className="col-md-3">
               <Tags tags={blog?.tags}/>
