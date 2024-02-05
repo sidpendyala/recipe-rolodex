@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { excerpt } from '../utility';
 
-const Card = ({title, description, imgUrl, id}) => {
+const Card = ({title, description, imgUrl, id, likes, comments}) => {
   return (
     <div>
         <div>
@@ -20,7 +20,8 @@ const Card = ({title, description, imgUrl, id}) => {
                             <span className="text-primary">Read More</span>
                         </Link>
                         <div>
-
+                            <i className='bi bi-hand-thumbs-up m-2' />{likes.length}
+                            <i className='bi bi-chat-left m-2' />{comments.length}
                         </div>
                     </div>
                 </div>

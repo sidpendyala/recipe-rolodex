@@ -8,22 +8,28 @@ import { isEmpty } from 'lodash';
 import Comments from '../components/Comments';
 import Comment from '../components/Comment';
 import { toast } from 'react-toastify';
+import Like from '../components/Like';
+import Spinner from '../components/Spinner';
 
 const Detail = ({setActive, user}) => {
   const userId = user?.uid;
   const {id} = useParams();
+  const [loading, setLoading] = useState(false);
   const [blog, setBlog] = useState(null);
-  const [comments, setComments] = useState([]); 
+  const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState([]);
   const [userComment, setUserComment] = useState("");
   const [relatedBlogs, setRelatedBlogs] = useState([]);
 
   const getBlogDetail = async () => {
+    setLoading(true);
     const blogRef = collection(db, "blogs");
     const docRef = doc(db, "blogs", id);
     const blogDetail = await getDoc(docRef);
     setBlog(blogDetail.data());
     const relatedBlogsQuery = query(blogRef, where("tags", "array-contains-any", blogDetail.data().tags, limit(3)));
     setComments(blogDetail.data().comments ? blogDetail.data().comments : []);
+    setLikes(blogDetail.data().likes ? blogDetail.data().likes : []);
     const relatedBlogsSnapshot = await getDocs(relatedBlogsQuery);
     const relatedBlogs = [];
     relatedBlogsSnapshot.forEach((doc) => {
@@ -31,12 +37,17 @@ const Detail = ({setActive, user}) => {
     });
     setRelatedBlogs(relatedBlogs);
     setActive(null);
+    setLoading(false);
   }
 
   useEffect(() => {
     id && getBlogDetail();
     // eslint-disable-next-line
   }, [id])
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   const handleComment = async (e) => {
     e.preventDefault();
@@ -54,6 +65,27 @@ const Detail = ({setActive, user}) => {
     });
     setComments(comments);
     setUserComment("")
+  };
+
+  const handleLike = async (e) => {
+    if(userId) {
+      if (blog?.likes) {
+        const index = likes.findIndex((id) => id === userId);
+        if (index === -1) {
+          likes.push(userId);
+          setLikes([...new Set(likes)])
+        } else {
+          // eslint-disable-next-line
+          likes = likes.filter((id) => id !== userId);
+          setLikes(likes)
+        }
+      }
+      await updateDoc(doc(db, "blogs", id), {
+        ...blog,
+        likes,
+        timestamp: serverTimestamp(),
+      })
+    }
   };
 
   return (
@@ -75,12 +107,19 @@ const Detail = ({setActive, user}) => {
               <span className="meta-info text-start">
                 By <p className="author">{blog?.author}</p> - &nbsp; 
                 {blog?.timestamp.toDate().toDateString()}
+                <Like
+                  handleLike={handleLike}
+                  blog={blog}
+                  likes={likes}
+                  userId={userId}
+                />
               </span>
               <p className="text-start">{blog?.description}</p>
               <br />
             <div className='custombox'>
+              <div className='scroll'>
               <h4 className='small-title'>
-                {blog?.comments?.length} comment(s)
+                {blog?.comments?.length} {blog?.comments?.length === 1 ? "comment" : "comments"}
                </h4>
                {isEmpty(comments) ? (
                 <Comments msg={"No comments yet! Be the first to comment."}/>
@@ -91,6 +130,7 @@ const Detail = ({setActive, user}) => {
                ))}
                </>
                )}
+               </div>
             </div>
             <Comment userId={userId} userComment={userComment} setUserComment={setUserComment} handleComment={handleComment}/>
             </div>

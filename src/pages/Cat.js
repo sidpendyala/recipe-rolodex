@@ -5,7 +5,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import BlogSection from "../components/BlogSection";
 
-const Cat = () => {
+const Cat = ({setActive}) => {
   const [cat, setCat] = useState([]);
   const [loading, setLoading] = useState(false);
   const { category } = useParams();
@@ -26,6 +26,7 @@ const Cat = () => {
 
   useEffect(() => {
     getCat();
+    setActive(null);
     // eslint-disable-next-line
   }, []);
 

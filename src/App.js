@@ -17,6 +17,7 @@ import { signOut } from 'firebase/auth';
 import Tag from './pages/Tag';
 import Cat from './pages/Cat';
 import ScrollToTop from './components/ScrollToTop';
+import Blogs from './pages/Blogs';
 
 function App() {
   const [active, setActive] = useState("home");
@@ -56,8 +57,9 @@ function App() {
         <Route path="/auth" element={<Auth setActive = {setActive} setUser={setUser} />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/search" element={<Home setActive={setActive} user={user}/>} />
-        <Route path="/tag/:tag" element={<Tag />}/>
-        <Route path="/category/:category" element={<Cat />} />
+        <Route path="/tag/:tag" element={<Tag setActive={setActive}/>}/>
+        <Route path="/category/:category" element={<Cat setActive={setActive}/>} />
+        <Route path="/blogs" element={<Blogs setActive={setActive}/>} />
       </Routes>
     </div>
   );

@@ -5,7 +5,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import BlogSection from "../components/BlogSection";
 
-const Tag = () => {
+const Tag = ({setActive}) => {
   const [tagBlog, setTagBlog] = useState([]);
   const [loading, setLoading] = useState(false);
   const { tag } = useParams();
@@ -26,6 +26,7 @@ const Tag = () => {
 
   useEffect(() => {
     getTags();
+    setActive(null);
     // eslint-disable-next-line
   }, []);
 
