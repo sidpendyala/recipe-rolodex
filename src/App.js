@@ -53,7 +53,7 @@ function App() {
         <Route path="/detail/:id" element={<Detail setActive = {setActive} user={user}/>} />
         <Route path="/create" element={user?.uid ? <AddEdit user={user} /> : <Navigate to="/" />} />
         <Route path="/update/:id" element={user?.uid ? <AddEdit user={user} setActive={setActive}/> : <Navigate to="/" />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/about" element={<About setActive={setActive}/>} />
         <Route path="/auth" element={<Auth setActive = {setActive} setUser={setUser} />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/search" element={<Home setActive={setActive} user={user}/>} />

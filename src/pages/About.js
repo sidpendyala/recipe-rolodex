@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 
-const About = () => {
+const About = ({setActive}) => {
+  useEffect(() => {
+    setActive("about");
+    //eslint-disable-next-line
+  }, []);
   return (
     <div className="container-fluid mb-4">
       <div className="container">
