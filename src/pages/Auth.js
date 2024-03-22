@@ -48,6 +48,8 @@ const Auth = ({setActive, setUser}) => {
     }
     navigate("/");
   };
+
+  
   return (
     <div className="container-fluid mb-4">
       <div className="container">

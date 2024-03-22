@@ -181,7 +181,7 @@ const Home = ({ setActive, user, active }) => {
           {blogs.length === 0  && location.pathname !== "/" && (
               <>
               <h4>
-                No blogs found with search keyword: &nbsp;
+                No recipes found with search keyword: &nbsp;
               <strong>{searchQuery}</strong>
               </h4>
               </>
